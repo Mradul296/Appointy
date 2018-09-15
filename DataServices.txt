@@ -1,0 +1,39 @@
+package main
+
+import(
+    'fmt'
+)
+
+
+func saveTodo(todolist TodoList){
+
+    int id = saveToDoList(todolist.value)
+
+    if(id!=0){
+        saveToDoListItems(todolist.item,id)
+    }
+}
+
+func deleteTodo(id int){
+    deleteTodoList(id)
+}
+
+func updateTodo(id int,name string){
+    updateTodoList(id,name)
+}
+
+func addItem(item TodoList_Item){
+    addTodoListItem(item)
+}
+
+func deleteItem(id int){
+    deleteTodItem(id);
+}
+
+func getItem(id int) TodoListItem{
+    return getTodoListitem(id)
+}
+
+func updateItem(item TodoListItem){
+    updateTodoListItem(item)
+}
