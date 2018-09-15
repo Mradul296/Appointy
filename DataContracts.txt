@@ -1,0 +1,20 @@
+package main
+
+type TodoListItem struct {
+	id int
+	value string
+	completed bool
+}
+
+type TodoList_Item struct{
+	item TodoListItem
+	todo_list_id int
+}
+
+
+type TodoList struct {
+	id int
+	item []TodoListItem
+	name string
+	
+}

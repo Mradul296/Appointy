@@ -1,0 +1,108 @@
+package main
+
+import (
+  "database/sql"
+  "fmt"
+
+  _ "github.com/lib/pq"
+)
+
+const (
+  host     = "localhost"
+  port     = 5432
+  user     = "postgres"
+  password = "@mradul"
+  dbname   = "Appointy"
+)
+
+func connect() *sql.DB{
+connectionString := fmt.Sprintf("host=%s port=%d user=%s "+
+    "password=%s dbname=%s sslmode=disable",
+    host, port, user, password, dbname)
+  db, err := sql.Open("postgres", connectionString)
+  if err != nil {
+    panic(err)
+  }
+  defer db.Close()
+
+  err = db.Ping()
+  if err != nil {
+    panic(err)
+  }
+
+  return db;
+}
+
+func saveTodoList(value string) int{
+
+  db *sql.DB = connect()
+  result, err := db.Exec(
+    "INSERT INTO TodoList (list_name) VALUES ($1) returning id;",
+    value)
+  return result
+}
+
+func saveTodoListItems(params []TodoListItem, id int){
+
+  db *sql.DB = connect()
+  for i, v := range params {
+            result, err := db.Exec(
+              "INSERT INTO TodoListItems (tot_list_id,item_name,isComplete) VALUES ($1,$2,$3);",id
+                v.value,v.completed)
+        }
+}
+
+func deleteTodoList(id int){
+  
+  db *sql.DB = connect()
+  result, err := db.Exec(
+              "deleteTodoList($1);",id)/*update TodoList set isDeleted = 1 where id = $1; update TodoListItems
+                                    set isDeleted = 1
+                                    where todo_list_id = $1
+                                    return*/
+}
+
+func updateTodoList(id int,name string){
+
+  db *sql.DB = connect()
+  result, err := db.Exec(
+              "updateTodoList($1,$2);",id,name)
+
+}
+
+
+func addTodoListItem(v TodoList_Item){
+
+  db *sql.DB = connect()
+  result, err := db.Exec(
+              "INSERT INTO TodoListItems (tot_list_id,item_name,isComplete) VALUES ($1,$2,$3);",v.todo_list_id
+                v.item.value,v.item.completed)
+}
+
+func deleteTodoItem(id int){
+
+  db *sql.DB = connect()
+  result, err := db.Exec(
+              "deleteTodoListItem($1);",id)
+}
+
+func getTodoListitem(id int) TodoListItem{
+  db *sql.DB = connect()
+  result TodoListItem
+  result, err := db.Exec(
+              "select id,item_name,isCompleted
+	            from TodoListItems
+              where id = $1;",id)
+}
+
+
+func updateTodoListItem(item TodoListItem){
+  db *sql.DB = connect()
+  if(item.completed==true)
+    result, err := db.Exec(
+              "updateTodoListItem($1,$2,$3);",item.id,item.value,1)
+
+  else
+  result, err := db.Exec(
+              "updateTodoListItem($1,$2,$3);",item.id,item.value,0)
+}
