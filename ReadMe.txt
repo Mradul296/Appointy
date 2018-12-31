@@ -1,1 +1,1 @@
-DataServices will recieve request from client service manager and forward it to DataBaseService and then DataBaseService will communicate with database and return results.It was my first time with GoLang hence the code might contain several bugs.
+DataServices will recieve request from client service manager and forward it to DataBaseService and then DataBaseService will communicate with database and return results.
